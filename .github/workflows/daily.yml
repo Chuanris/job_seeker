@@ -1,0 +1,76 @@
+name: Taiwan DS new-grad jobs
+on:
+  push:
+    branches: [main, master]
+    paths:
+      - '.github/workflows/daily.yml'
+      - 'jobbot/**'
+      - 'tests/**'
+      - 'demo/**'
+      - 'config.json'
+  schedule:
+    - cron: '0 1 * * *' # 01:00 UTC = 09:00 Asia/Taipei
+  workflow_dispatch:
+    inputs:
+      demo:
+        description: 'Run synthetic demo without a Search API key'
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: taiwan-ds-job-bot
+  cancel-in-progress: false
+
+jobs:
+  search:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      BRAVE_SEARCH_API_KEY: ${{ secrets.BRAVE_SEARCH_API_KEY }}
+      TELEGRAM_ENABLED: ${{ vars.TELEGRAM_ENABLED || 'false' }}
+      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Restore dedupe state
+        uses: actions/cache/restore@v4
+        with:
+          path: data/state.db
+          key: ds-job-state-v1-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: ds-job-state-v1-
+      - name: Run tests
+        env:
+          GITHUB_STEP_SUMMARY: ''
+        run: python -m unittest discover -s tests -q
+      - name: Run offline demo
+        if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.demo)
+        run: python -m jobbot --demo
+      - name: Search and report
+        if: (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && !inputs.demo)) && env.BRAVE_SEARCH_API_KEY != ''
+        run: python -m jobbot
+      - name: Explain missing Search key
+        if: (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && !inputs.demo)) && env.BRAVE_SEARCH_API_KEY == ''
+        shell: bash
+        run: echo 'Search is not enabled. Add BRAVE_SEARCH_API_KEY under repository Actions secrets; manual demo runs need no key.' >> "$GITHUB_STEP_SUMMARY"
+      - name: Preserve state even if notification failed
+        if: always() && hashFiles('data/state.db') != ''
+        uses: actions/cache/save@v4
+        with:
+          path: data/state.db
+          key: ds-job-state-v1-${{ github.run_id }}-${{ github.run_attempt }}
+      - name: Upload reports and database backup
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jobs-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            reports/
+            data/state.db
+          retention-days: 30
+          if-no-files-found: ignore

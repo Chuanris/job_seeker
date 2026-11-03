@@ -1,0 +1,23 @@
+{
+  "queries": [
+    "site:104.com.tw/job (資料科學家 OR 數據科學家 OR \"Data Scientist\") (經歷不拘 OR 新鮮人 OR 應屆)",
+    "site:cake.me/companies (\"Data Scientist\" OR 資料科學家) (junior OR graduate OR 新鮮人 OR 經驗不拘) Taiwan",
+    "site:yourator.co/companies (資料科學 OR \"data scientist\") (新鮮人 OR junior OR 經驗不拘)",
+    "site:linkedin.com/jobs/view \"Data Scientist\" Taiwan (\"new grad\" OR graduate OR junior)",
+    "\"Data Scientist\" Taiwan (\"new graduates\" OR \"new college graduates\" OR \"0-2 years\") careers",
+    "資料科學家 (應屆 OR 新鮮人 OR 經驗不拘) 招募 台灣",
+    "\"Machine Learning Engineer\" Taiwan (\"new grad\" OR \"0-2 years\") careers",
+    "機器學習工程師 (應屆 OR 新鮮人) 台灣 招募"
+  ],
+  "seed_urls": [],
+  "freshness": "pm",
+  "pages_per_query": 1,
+  "results_per_query": 20,
+  "max_pages": 100,
+  "search_interval_seconds": 1.1,
+  "page_interval_seconds": 1.2,
+  "timeout_seconds": 20,
+  "state_path": "data/state.db",
+  "report_dir": "reports",
+  "telegram": false
+}

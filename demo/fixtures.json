@@ -1,0 +1,40 @@
+[
+  {
+    "title": "Junior Data Scientist",
+    "company": "合成示範科技 A（非真實公司）",
+    "location": "台北市 Taiwan",
+    "description": "此為合成測試資料。歡迎應屆畢業生。Python、SQL、統計建模與機器學習。加分條件：2年以上工作經驗。",
+    "url": "https://example.com/demo/job-a",
+    "employment": "FULL_TIME",
+    "education": "學士或碩士",
+    "salary": "TWD 60000–80000 / MONTH（示範數字）",
+    "verified": true
+  },
+  {
+    "title": "Data Scientist",
+    "company": "合成示範科技 B（非真實公司）",
+    "location": "新竹 Taiwan",
+    "description": "此為合成測試資料。Python、SQL、機器學習；未說明是否接受應屆。",
+    "url": "https://example.com/demo/job-b",
+    "employment": "FULL_TIME",
+    "verified": true
+  },
+  {
+    "title": "Senior Data Scientist",
+    "company": "合成示範科技 C（非真實公司）",
+    "location": "Taipei Taiwan",
+    "description": "此為合成測試資料。5 years of professional experience required.",
+    "url": "https://example.com/demo/job-c",
+    "employment": "FULL_TIME",
+    "verified": true
+  },
+  {
+    "title": "Data Scientist Intern",
+    "company": "合成示範科技 D（非真實公司）",
+    "location": "Taipei Taiwan",
+    "description": "Currently enrolled students only. Synthetic test data.",
+    "url": "https://example.com/demo/job-d",
+    "employment": "INTERN",
+    "verified": true
+  }
+]
